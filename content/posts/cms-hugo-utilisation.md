@@ -2,6 +2,8 @@
 title: "Hugo CMS - utilisation"
 date: 2022-04-01T21:55:44+02:00
 draft: true
+categories: ["CMS"]
+tags: ["CMS", "site statique", "open source", "GO", "bases"]
 ---
 
 Hugo est un générateur de site statique (= rapide et bon SEO), open soucre et codé en GO.
@@ -29,6 +31,9 @@ hugo server
 
 # lancer le site sur localhost:1313, y compris les articles "draft"
 hugo server -D
+
+# Build et crée le dossier "public" avec le HTML généré par Hugo
+hugo
 ```
 
 ## Organisation des dossiers
@@ -74,6 +79,24 @@ Il y a 2 grands types de contenus dans Hugo:
 Ce sont les meta-datas en haut d'un fichier de post. Par défaut : "title", "date", et "draft", mais il est possible d'en rajouter autant qu'on veut.
 Il est possible de récupérer ces **front matter** dans les layouts.
 
-## Archetypes
+## Archetypes
+
 Ils sont définis dans le dossier "archetypes".
 **default.md** à la racine permet de fdéfinir les front matter présents par défaut lorsqu'on crée un nouveau post.
+
+Il est possible de créer des archetypes spécifique pour les posts situés dans un dossier spécifique => simplement nommer le fichier d'archetype de la même manière que le dossier en question.
+
+## Shortcodes
+
+Ce sont des "bouts de code" html déjà codés pour faire une action en particulier.  
+Pour les utiliser, utiliser la double accolade {} et à l'intérieur <...> ou %...% :
+
+Il est possible de créer des shortcodes perso avec des "shortcode templates"
+
+## Taxonomies
+
+Par défaut, il y a 2 taxonomies : "catégories" et "tags"  
+une **list page** est générée automatiquement pour chaque taxonomie définie dans les articles.  
+Exemple, si on a un tag "mon tag", l'url localhost:1313/tag/mon-tag sera accessible et va répertorier tous les articles avec le tag "nom tag"
+
+Il est possible de créer sa propre taxonomie, en redéfinissant TOUTES les taxonomies dans le fichier config.toml (cf. doc)
