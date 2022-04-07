@@ -1,0 +1,17 @@
+{{ define "head"}}
+<title>Tasy - dans le block</title>
+{{ end }}
+
+
+
+{{ define "main"}}
+
+<h1>Coucou c'est ma homepage !! :)</h1>
+
+<ul>
+  {{ range .Pages }}
+  <li><a href="{{ .URL }}">{{ .Title }}</a></li>
+  {{ end }}
+</ul>
+
+{{ end }}

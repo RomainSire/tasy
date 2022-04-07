@@ -1,9 +1,9 @@
 ---
-title: "Hugo CMS - utilisation"
+title: "Hugo: Utilisation"
 date: 2022-04-01T21:55:44+02:00
 draft: true
 categories: ["CMS"]
-tags: ["CMS", "site statique", "open source", "GO", "bases"]
+tags: ["CMS", "site statique", "open source", "GO"]
 ---
 
 Hugo est un générateur de site statique (= rapide et bon SEO), open soucre et codé en GO.
