@@ -100,3 +100,9 @@ une **list page** est générée automatiquement pour chaque taxonomie définie 
 Exemple, si on a un tag "mon tag", l'url localhost:1313/tag/mon-tag sera accessible et va répertorier tous les articles avec le tag "nom tag"
 
 Il est possible de créer sa propre taxonomie, en redéfinissant TOUTES les taxonomies dans le fichier config.toml (cf. doc)
+
+## Fichiers statiques (images, etc.)
+
+Les fichiers contenus dans le dossier `static` sont directement accessibles dans les articles en markdown.  
+Exemple:  
+Si j'ai une image `static/monImge.jpg`, je peux y accéder dans mon article avec `![mon image](/monImge.jpg)`
