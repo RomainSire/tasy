@@ -9,7 +9,7 @@
 <h1>Coucou c'est ma homepage !! :)</h1>
 
 <ul>
-  {{ range .Pages }}
+  {{ range .Site.RegularPages }}
   <li><a href="{{ .URL }}">{{ .Title }}</a></li>
   {{ end }}
 </ul>
