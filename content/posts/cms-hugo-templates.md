@@ -49,6 +49,11 @@ Il est possible de créer plusieurs blocks pour chaque template un pour le "head
 
 Dans le fichier `baseof.html` entre le début du block et le "end", il est possible d'ajouter le texte affiché par défaut, si le block n'est pas redéfini dans les templates.
 
+## Page 404
+
+Créer le fichier `404.html` dans le dossier `layout`.  
+Il focntionne comme tous les autres layouts! :)
+
 ## Variables
 
 ### Définitaion et usage
@@ -144,3 +149,135 @@ Il faut tapper le mot clé **if**, puis l'opérateur, puis la condition: `{{ if 
   </li>
 {{ end }}
 ```
+
+## Les fichiers data
+
+Ils sont situés dans le dossier **"Data"**, et font office de mini base de données. On peut y mettre des fichiers **json**, **yaml**, ou encore **toml**.
+
+On peut accéder à ces données dans les templates avec `.Site.Data.fileName`
+
+### Exemple
+
+On peut créer un fichier `countries.json` dans le dossier `data`, dans lequel on va répertorier des infos sur tous les pays :
+
+```json
+{
+  "france": {
+    "language": "french",
+    "flag": "blue white red"
+  },
+  "spain": {
+    "language": "spanish",
+    "flag": "red yellow"
+  }
+}
+```
+
+Pour les lister toutes les langues dans le template, on va faire :
+
+```go
+{{ range .Site.Data.countries }}
+  <li>{{ .language }}</li>
+{{ end }}
+```
+
+## Partials
+
+Permet d'injecter un "bout" de html dans un autre template.
+
+Dans le dossier `layout` on va créer un nouveau sous-dossier `partials` puis créer le partial que l'on veut en créant un fichier html, par exemple: `header.html`.
+
+On écrit le html que l'on veut dans le partial, puis dans un autre templte, on peut injecter ce partial avec :
+
+```go
+{{ partial "header" . }}
+```
+
+Le point représente le scope dont aura accès le partial. Dans ce cas, on lui passe le scope actuel. On aurait pu lui passer le scope d'une page en particulier, par exemple.
+
+Plutôt que le scope, on peut lui passer un dictionnaire, en précisant quelles variables exactement seront passées au partial. Exemple pour passer le titre et la date d'un article seulement:
+
+```go
+{{ partial "header" (dict "myTitle" .Title "myDate" .Date) }}
+```
+
+Dans le partial, on récupère ces propriétés avec `{{.myTitle}}` et `{{.myDate}}`
+
+> NB: l'exemple du header est un peu nul, car il vaut mieux les définir avec les **"base templates"**.  
+> Il vaut mieux imaginer les partials comme des "composants" réutilisables. On pourrait alors avoir un partial 'card' par exemple.
+
+## Shortcodes
+
+C'est des petits bouts de code qu'on peu ajouter à notre contenu dans les fichiers markdown pour faire des actions particulières.  
+En gros, c'est des partials, mais pour le content et non pas pour le layout.
+
+Il faut créer le sous-dossier `shortcodes` dans le dossier `layouts`, puis créer un fichier html. Par exemple `myShortcode.html`, à l'intérieur on y met le html qu'on veut.
+
+### Shortcode à tag simple
+
+Ensuite dans l'un de nos article, on appelle ce shortcode avec:
+
+```go
+{{ < myShortcode > }} // nb: enlever les espaces entre les accolades et les < > !!
+```
+
+On peut aussi lui passer des variables, par exemple:
+
+```go
+{{ < myShortcode color="blue"; > }} // nb: enlever les espaces entre les accolades et les < > !!
+```
+
+Dans le shortcode, on récupère la variable avec `{{ .Get "varName" }}`. Exemple:
+
+```go
+<h1 style="color:{{.Get `color`}};">Mon titre coloré</h1>
+// utiliser le backtick autour de color pour ne pas avoir de conflit avec les guillemets
+```
+
+On peut aussi passer un paramètre "positionnel". En reprenant l'exemple ci-dessus:  
+Dans le content (fichier \*.md):
+
+```go
+{{ < myShortcode blue > }} // nb: enlever les espaces entre les accolades et les < > !!
+```
+
+Et dans le shortcode, on lui dit de prendre le paramètre 0:
+
+```go
+<h1 style="color:{{.Get 0}};">Mon titre coloré</h1>
+// utiliser le backtick autour de color pour ne pas avoir de conflit avec les guillemets
+```
+
+### Shortcodes à double tags
+
+Dans ce cas, dans template, on l'appelle avec :
+
+```go
+{{ < myShortcode > }}
+  texte entre les balises
+{{ < /myShortcode > }}
+// nb: enlever les espaces entre les accolades et les < > !!
+```
+
+Puis dans notre shortcode myShortcode.html, on peut accéder à ce qu'il y a entre les balises avec:
+
+```go
+{{ .Inner }}
+```
+
+> NB: si on met du markdown entre ces balises il ne sera pas interprété. Pour qu'il soit interprété, remplacer les **< >** par des **%**
+
+### Cas pratique
+Une utilisation très pratique de ces shortcode, serait de décliner les images en images adaptatives avec les balises `<pictures>` et `<source>` en passant l'url ou la filename de l'image en paramètre de shortcode.
+
+## Build & host !
+
+Pour build, rien de plus simple:
+
+```bash
+hugo
+```
+
+Le dossier `public` apparait avec tous les fichier html générés.
+
+Il suffit de copier ce dosiser sur un serveur web! :)
