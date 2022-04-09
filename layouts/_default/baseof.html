@@ -5,16 +5,33 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/style/reset.css">
+  <link rel="stylesheet" href="/style/main.css">
+  <link rel="stylesheet" href="/style/baseof.css">
+  <script src="/script/main.js" defer></script>
+
   {{ block "head" .}}
-  <title>Trucmuche</title>
+  <title>Tasy</title>
   {{ end }}
 </head>
 
-<body>
-  dans baseof :)
-  {{ block "main" . }}
-  main par défaut! :)
-  {{ end }}
+<body class="site-wrapper">
+  <header class="site-header">
+    <a href="/" class="logo">
+      <img src="/logo.svg" alt="logo de Tasy">
+      <span class="site-name">Tasy</span>
+    </a>
+  </header>
+
+  <main class="site-main">
+    {{ block "main" . }}
+    {{ end }}
+  </main>
+
+  <footer class="site-footer">
+    <span id="copyright-year"></span>
+  </footer>
+
 </body>
 
 </html>

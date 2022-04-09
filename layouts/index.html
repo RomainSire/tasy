@@ -1,17 +1,36 @@
 {{ define "head"}}
-<title>Tasy - dans le block</title>
+<link rel="stylesheet" href="/style/home.css">
+<title>Tasy</title>
 {{ end }}
 
 
-
 {{ define "main"}}
-
-<h1>Coucou c'est ma homepage !! :)</h1>
-
-<ul>
+<div class="home">
   {{ range .Site.RegularPages }}
-  <li><a href="{{ .URL }}">{{ .Title }}</a></li>
+  <article class="home-card">
+    <header>
+      <!-- title -->
+      <h2>
+        <a href="{{ .Permalink }}">{{ .Title }}</a>
+      </h2>
+    </header>
+    <!-- description -->
+    {{ if .Description }}
+    <section class="home-card-description">
+      {{.Description}}
+    </section>
+    {{ end }}
+    <!-- tags -->
+    {{ if .Params.tags }}
+    <footer class="home-card-tags">
+      {{ range .Params.tags }}
+      <a href="{{ `/tags/` | relLangURL }}{{ . | urlize }}">
+        {{ . }}
+      </a>
+      {{ end }}
+    </footer>
+    {{ end }}
+  </article>
   {{ end }}
-</ul>
-
+</div>
 {{ end }}
