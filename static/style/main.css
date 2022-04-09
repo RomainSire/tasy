@@ -1,0 +1,38 @@
+@font-face {
+  font-family: "Comfortaa";
+  src: url("../fonts/Comfortaa-Bold.ttf") format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Montserrat";
+  src: url("../fonts/Montserrat-Regular.ttf") format("truetype");
+  font-display: swap;
+}
+
+:root {
+  --color-dark: #1d1e20;
+  --color-light: #dadadb;
+  --color-emph: #fb8b2b;
+  --font-main: Montserrat, sans-serif;
+  --font-titles: Comfortaa, sans-serif;
+}
+
+body {
+  background-color: var(--color-dark);
+  color: var(--color-light);
+  font-family: var(--font-main);
+  font-size: 16px;
+  line-height: 1.8em;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-titles);
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}

@@ -1,0 +1,13 @@
+.four-oh-four {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+.four-oh-four img {
+  border-radius: 2rem;
+  box-shadow: 0 0 1rem var(--color-light);
+}
