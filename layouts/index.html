@@ -3,8 +3,14 @@
 <title>Tasy</title>
 {{ end }}
 
-
 {{ define "main"}}
+{{ if .Content }}
+<section>
+  {{ .Content }}
+</section>
+{{ end }}
+
+<h1 class="home-title">Tous les articles</h1>
 <div class="home">
   {{ range .Site.RegularPages }}
   <article class="home-card">

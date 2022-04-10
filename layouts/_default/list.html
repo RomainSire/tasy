@@ -1,21 +1,44 @@
-<!DOCTYPE html>
-<html lang="fr">
+{{ define "head"}}
+<link rel="stylesheet" href="/style/home.css">
+<title>Tasy - {{ .Title }}</title>
+{{ end }}
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tasy - {{ .Title }}</title>
-</head>
+{{ define "main"}}
 
-<body>
+<!-- Description -->
+<h1 class="home-title">{{ .Title }}</h1>
+{{ if .Content }}
+<section class="list-description">
   {{ .Content }}
+</section>
+{{ end }}
 
-  <ul>
-    {{ range .Pages }}
-    <li><a href="{{ .URL }}">{{ .Title }}</a></li>
+<div class="home">
+  {{ range .Pages }}
+  <article class="home-card">
+    <header>
+      <!-- title -->
+      <h2>
+        <a href="{{ .Permalink }}">{{ .Title }}</a>
+      </h2>
+    </header>
+    <!-- description -->
+    {{ if .Description }}
+    <section class="home-card-description">
+      {{.Description}}
+    </section>
     {{ end }}
-  </ul>
-</body>
-
-</html>
+    <!-- tags -->
+    {{ if .Params.tags }}
+    <footer class="home-card-tags">
+      {{ range .Params.tags }}
+      <a href="{{ `/tags/` | relLangURL }}{{ . | urlize }}">
+        {{ . }}
+      </a>
+      {{ end }}
+    </footer>
+    {{ end }}
+  </article>
+  {{ end }}
+</div>
+{{ end }}
