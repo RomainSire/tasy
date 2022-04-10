@@ -37,3 +37,8 @@
   padding: 0.5rem;
   font-size: 0.8rem;
 }
+.to-top {
+  position: fixed;
+  right: 3rem;
+  bottom: 3rem;
+}

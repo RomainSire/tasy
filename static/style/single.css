@@ -8,6 +8,7 @@
 }
 .page-content {
   margin-bottom: 2rem;
+  max-width: 90vw;
 }
 .page-content h1,
 .page-content h2 {
@@ -20,4 +21,8 @@
 .page-content h4 {
   margin-top: 0.7rem;
   margin-left: 1.5rem;
+}
+.page-content pre {
+  overflow-x: auto;
+  padding: 0.5rem;
 }

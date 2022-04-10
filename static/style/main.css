@@ -16,7 +16,9 @@
   --font-main: Montserrat, sans-serif;
   --font-titles: Comfortaa, sans-serif;
 }
-
+html {
+  scroll-behavior: smooth;
+}
 body {
   background-color: var(--color-dark);
   color: var(--color-light);
