@@ -2,7 +2,7 @@
 title: "Hugo: Utilisation"
 date: 2022-04-01T21:55:44+02:00
 draft: false
-tags: ["Hugo", "HTML", "CSS", "CMS", "site statique", "open source"]
+tags: ["Hugo", "Markdown", "CMS", "site statique", "open source"]
 description: "Les bases du fonctionnement et comment utiliser simplement le générateur de site statique 'Hugo'"
 ---
 

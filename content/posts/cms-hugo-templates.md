@@ -2,7 +2,7 @@
 title: "Hugo: Templates"
 date: 2022-04-01T23:27:10+02:00
 draft: false
-tags: ["Hugo", "HTML", "CSS", "CMS", "site statique", "open source"]
+tags: ["Hugo", "HTML", "CSS", "site statique", "open source"]
 description: "Comment personnaliser les sites statiques générés par Hugo en créant ses propres templates et thèmes"
 ---
 
