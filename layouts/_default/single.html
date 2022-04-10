@@ -1,17 +1,20 @@
-<!DOCTYPE html>
-<html lang="fr">
+{{ define "head"}}
+<link rel="stylesheet" href="/style/single.css">
+<title>Tasy - {{ .Title }}</title>
+{{ end }}
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ .Title }} - Tasy</title>
-</head>
+{{ define "main"}}
+<h1 class="page-title">{{ .Title }}</h1>
+<!-- date -->
+{{ $month_names := slice "janvier" "février" "mars" "avril" "mai" "juin" "juillet" "août" "septembre" "octobre" "novembre" "décembre" }}
+{{ $month := sub .Date.Month 1 }}
+<em class="page-date">
+  Publié le <time datetime="{{ .Date.Format `2006-01-02`}}">
+    {{ .Date.Day }}{{ if eq .Date.Day 1 }}er{{end}}&nbsp;{{ index $month_names $month }} {{ .Date.Year }}
+  </time>
+</em>
 
-<body>
-  <h1>{{ .Title }}</h1>
-  <em>{{ .Date }}</em>
+<section class="page-content">
   {{ .Content }}
-</body>
-
-</html>
+</section>
+{{ end }}

@@ -1,0 +1,23 @@
+.page-title {
+  margin: 2rem 0;
+}
+.page-date {
+  display: block;
+  opacity: 0.7;
+  margin-bottom: 2rem;
+}
+.page-content {
+  margin-bottom: 2rem;
+}
+.page-content h1,
+.page-content h2 {
+  margin-top: 2rem;
+}
+.page-content h3 {
+  margin-top: 1rem;
+  margin-left: 1rem;
+}
+.page-content h4 {
+  margin-top: 0.7rem;
+  margin-left: 1.5rem;
+}
