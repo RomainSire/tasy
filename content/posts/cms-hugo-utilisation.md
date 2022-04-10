@@ -1,5 +1,5 @@
 ---
-title: "Hugo: Utilisation"
+title: "Utilisation simple de Hugo"
 date: 2022-04-01T21:55:44+02:00
 draft: false
 tags: ["Hugo", "Markdown", "CMS", "site statique", "open source"]
