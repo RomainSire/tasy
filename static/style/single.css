@@ -26,3 +26,11 @@
   overflow-x: auto;
   padding: 0.5rem;
 }
+.page-content blockquote {
+  margin-left: 1rem;
+  padding-left: 1rem;
+  border-left: 5px solid var(--color-emph);
+}
+.page-content strong {
+  font-weight: bold;
+}

@@ -8,6 +8,12 @@
   src: url("../fonts/Montserrat-Regular.ttf") format("truetype");
   font-display: swap;
 }
+@font-face {
+  font-family: "Montserrat";
+  src: url("../fonts/Montserrat-ExtraBold.ttf") format("truetype");
+  font-display: swap;
+  font-weight: bold;
+}
 
 :root {
   --color-dark: #1d1e20;
