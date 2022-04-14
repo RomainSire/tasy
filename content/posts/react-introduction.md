@@ -286,6 +286,94 @@ function QuestionForm() {
 export default QuestionForm;
 ```
 
-## Le hook : useState()
+## Le hook useState()
+
+### Définition
 
 Le "state" correspond en fait au jeu de données qui est utilisé par le composant et qui est conservé même si le composant est re-render.
+
+Le state ne peur pas être modifié directement, le state peut être consdéré comme une constante dans la fonction, il faut passer par le **hook** `useState()`.
+
+### Syntaxe
+
+```jsx
+const [truc, setTruc] = useState(valInitiale);
+// truc : la variable du state
+// setTruc : la focntion qui permet de changer le state : on lui passe en param la nouvelle valeur de la variable du state
+// valInitiale : la valeur initiale de la variable du state
+```
+
+On utilise les crochets car on utilise la déstructuration (ou "décomposition" pour les array).. on aurait très bien pu faire:
+
+```jsx
+const trucArray = useState(valInitiale);
+const truc = trucArray[0];
+const setTruc = trucArray[1];
+// => ça marche mais c'est moche !
+```
+
+On peut utiliser plusieurs `useState()` dans un composant, mais ils ne doivent pas être "nesté" dans des sous-fonctions du composant.
+
+### Exemple
+
+```jsx
+function Cart() {
+  const itemPrice = 8;
+  const [cart, updateCart] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+
+  return isOpen ? (
+    <div className="lmj-cart">
+      <button onClick={() => setIsOpen(false)}>Fermer</button>
+      <h2>Panier</h2>
+      <div>
+        Monstera : {itemPrice}€
+        <button onClick={() => updateCart(cart + 1)}>Ajouter</button>
+      </div>
+      <h3>Total : {itemPrice * cart}€</h3>
+    </div>
+  ) : (
+    <button onClick={() => setIsOpen(true)}>Ouvrir le Panier</button>
+  );
+}
+```
+
+### "Faire remonter" le state
+
+Dans ce cas, le `useState()` sera défini dans un composant parent, le state sera passé au composant enfant dans les props, ainsi que la fonction d'update.  
+Cela permet de "partager" le state entre différents composants enfants.
+
+```jsx
+function ParentComponent() {
+  const [truc, updateTruc] = useState("truc initial");
+
+  return (
+    <div>
+      <ChildComponent1 truc={truc} updateTruc={updateTruc} />
+      <ChildComponent2 truc={truc} updateTruc={updateTruc} />
+    </div>
+  );
+}
+
+function ChildComponent1({ truc, updateTruc }) {
+  return (
+    <div>
+      <p>mon truc: {truc}</p>
+      <button onClick={() => updateTruc("autre truc")}>change truc 1</button>
+    </div>
+  );
+}
+
+function ChildComponent2({ truc, updateTruc }) {
+  return (
+    <div>
+      <p>mon truc: {truc}</p>
+      <button onClick={() => updateTruc("encore un autre truc")}>
+        change truc 2
+      </button>
+    </div>
+  );
+}
+```
+
+## Le Hook useEffect()
