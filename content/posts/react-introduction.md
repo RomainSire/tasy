@@ -377,3 +377,40 @@ function ChildComponent2({ truc, updateTruc }) {
 ```
 
 ## Le Hook useEffect()
+
+### Définition
+
+Permet d'exécuter une fonction
+
+- soit à chaque fois que le composant est re-render (= à chaque fois que le state change)
+- soit lorsque une/des variable(s) spécifique(s) du state change
+- soit une fois au premier render
+
+### Syntaxe
+
+```jsx
+useEffect(callback, []);
+
+// 1er param obligatoire: la fonction qui sera exécutée
+// 2eme param optionnel: le tableau de dépendance
+```
+
+### Règles du tableau de dépendance
+
+- `useEffect(callback)` : si aucun 2eme paramètre n'est passé, le callback est appelé à chaque fois que le composant est render
+- `useEffect(callback, [toto, tutu])` : si un tableau de dépendance est passé en 2eme argument, le callback ne sera appelé que si les variables spécifiées (toto et tutu dans l'exemple..) sont modifiées avec useState()
+- `useEffect(callback, [])` : si un tableau vide est passé, le callback sera exécuté seulement un premier render du composant.
+
+### callback à la suppression du composant
+
+Il est aussi possible d'exécuter une fonction au "démontage" du composant. Pour cela, le callback doit **return** une autre fonction qui sera exécutée juste avant la suppression du composant du DOM :
+
+```jsx
+useEffect(() => {
+  console.log("affiché à chaque fois que le state change");
+
+  return () => {
+    console.log("affiché au démontage du composant");
+  };
+});
+```
