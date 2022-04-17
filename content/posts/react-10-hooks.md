@@ -2,7 +2,7 @@
 title: "10 hooks de React expliqués"
 date: 2022-04-15T12:47:26+02:00
 tags: ["react", "javascript", "framework", "hooks"]
-description: "Comment fonctionnent les 10hooks les plus communs de React"
+description: "Comment fonctionnent les 10 hooks les plus communs de React"
 ---
 
 ## Introduction
@@ -271,3 +271,116 @@ function App() {
 ```
 
 ## 5. useReducer()
+
+C'est une autre manière d'utiliser le state : plutôt que de mettre à jour le state directement, on envoie une action qui arrive à une fonction "reducer" qui détermine comment modifier le state.
+
+```jsx
+function reducer(state, action) { // prend le state et l'action (= ce qu'il y a dans le dispach de l'element html)
+  switch (action.type) {
+    case 'increment':
+      return state + 1;
+    case 'decrement':
+      return state - 1;
+    default
+      throw new Error();
+  }
+}
+
+fucntion App() {
+  const [state, dispach] = useReducer(reducer, 0); // prend le state, et la valeur initiale en param
+  return (
+    <>
+      Count: {state}
+      <button onClick={() => dispach({type: 'decrement'})}>-</button>
+      <button onClick={() => dispach({type: 'increment'})}>+</button>
+    </>
+  )
+}
+```
+
+## 6. useMemo()
+
+Améliore les perfs : permet de mettre en cache certaines valeurs sans recalculer à chaque fois que le composent re-render.
+
+> NB: utiliser avec parcimonie
+
+```jsx
+function App() {
+  const [count, setCount] = useState(60);
+
+  const expensiveCount = useMemo(() => {
+    return count ** 2;
+  }, [count]); // 2ème argument = tableau de dépendances
+  // "expensiveCount" est recalculé seulement lorsque "count" change
+
+  return <></>;
+}
+```
+
+## 7. useCallback()
+
+c'est un `useMemo()` mais pour une fonction entière
+
+Ca peut être utile lorsqu'on passe une fonction à d'autres composants enfants, si on utilise `useCallback()` on peut éviter des re-render inutiles de composants enfants.
+
+```jsx
+function App() {
+  const [count, setCount] = useState(60);
+
+  const showCount = useCallback(() => {
+    alert(`Count: ${count}`);
+  }, [count]);
+
+  return (
+    <>
+      <ComposantEnfant handler={showCount} />
+    </>
+  );
+}
+```
+
+## 8. useImperativeHandle()
+
+Peut être utile lorsqu'on construit une librairie de composants réutilisables : focntionne de pair avec le hook `useRef()`.
+
+Dans ce cas, `useImperativeHandle()` permet de modifier le comportement du `ref` exposé.
+
+Ce hook est quand même rarement utile..!
+
+## 9. useLayoutEffect()
+
+Fonctionne un peu comme `useEffect()`, mais le moment d'exécution du callback difère: le callback sera lancé après avoir "render" le composant, mais avant que le "paint" ait été affiché à l'écran.
+
+CAD que React va attendre que le code ait fini de s'exécuter pour mettre à jour l'UI pour l'utilisateur.
+
+Peut être utile, par exemple, lorsqu'on doit calculer la position d'un élément visuel dans le callback..
+
+## 10. useDebugValue()
+
+N'est utile que si l'on crée ses propres hooks. Et il faut aussi avoir **"React dev tool"** installé sur son navigateur.
+
+Dans React devtool, chaque composant dans l'arbre donne des infos sur les hooks utilisés.
+
+`useDebugValue()` permet de définir ce qui sera affiché ici pour ses hooks customs.
+
+## 11. Bonus: Créer un hook custom (et utiliser useDebugValue..)
+
+```jsx
+function useDisplayName() {
+  const [displayName, setDisplayName] = useState();
+
+  useEffect(() => {
+    const data = fetchFromDatabase(props.userId);
+    setDisplayName(data.displayName);
+  }, []);
+
+  useDebugValue(displayName ?? "loading..."); // affiche displayName ou "loading" dans react devtool
+
+  return displayName;
+}
+
+function App() {
+  const displayName = useDisplayName();
+  return <button>{displayName}</button>;
+}
+```
