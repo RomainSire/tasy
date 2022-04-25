@@ -66,7 +66,7 @@ Easy peasy, installer: **`npm install sass`**, et voila! renommer les fichiers c
 
 ### 4. CSS-in-JS
 
-Dans le JSX, le HTML est déjà complètement géré par le JS, donc autant faire gérer le CSS également par le JS !  
+Dans le JSX, le HTML est déjà complètement géré par le JS, donc autant faire gérer le CSS également par le JS !
 Perso, je préfère le css traditionnel, mais ça peut avoir des avantages.
 
 Dans ce cas, la libraisie "styled components" est une bonne option.
@@ -88,3 +88,188 @@ Là c'est Bootstrap : même combat, je ne suis pas fan !
 Exemple: React bootstrap, ou Mantine. Ce sont des composants déjà codés qu'on peut utiliser.
 
 Ça peut être utile quand on n'a pas d'inspi !
+
+## Calls API
+
+On va combiner les hooks `useState()` et `useEffect()` pour effectuer des calls API, il est également facile de créer un loader qui sera affiché pendant le chargement des données.
+
+**Exemple:**
+
+```jsx
+function StuffsList() {
+  const [stuffs, setStuffs] = useState({});
+  const [isDataLoading, setDataLoading] = useState(false);
+
+  useEffect(() => {
+    setDataLoading(true);
+    fetch(`http://localhost:8000/stuffs`)
+      .then((response) => response.json())
+      .then(({ stuffs }) => {
+        setStuffs(stuffs);
+        setDataLoading(false);
+      });
+  }, []);
+
+  return (
+    <div>
+      <h1>Liste de trucs</h1>
+      {isDataLoading ? (
+        <Loader />
+      ) : (
+        <ul>
+          {stuffs.map((stuff) => (
+            <li>{stuff.title}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+export default StuffsList;
+```
+
+## Le contexte
+
+Le contexte permet de partager des props (le state), sans devoir les passer d'un composant parent, à son enfant, à son petit-enfant, etc.
+
+[cf. l'article concernant 10 hooks de react, au chapitre concernant `useContext()`](https://tasy.fr/posts/react-10-hooks/)
+
+## Créer ses propres hooks
+
+Il est possible de créer ses propres hooks pour mettre en commun du code répétitif utilisé pas plusieurs composants.
+
+**Exemple concret: hook pour un call API**
+
+```jsx
+// Dans un fichier à part:
+
+export function useFetch(url) {
+  const [data, setData] = useState({});
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (!url) return;
+    setLoading(true);
+
+    async function fetchData() {
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        setData(data);
+      } catch (err) {
+        console.log(gerr);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, [url]);
+
+  return { isLoading, data, error };
+}
+
+// Dans un composant:
+const { data, isLoading, error } = useFetch(`http://localhost:8000/trucmuche`);
+```
+
+## Tests unitaires avec Jest
+
+**Jest** est installé par défaut avec create-react-app, sinon il faut l'installer.
+Pour tester un composant, simplement créer un fichier **`MonComposant.test.js`**
+
+**Exemple d'un test**
+
+```jsx
+// Fonction utilitaire testée:
+export function add(a, b) {
+  if (typeof a !== "number" || typeof b !== "number") null;
+  return a + b;
+}
+
+// la fonction de test
+import { add } from "./";
+
+describe("The add function", () => {
+  it("should add two numbers", () => {
+    expect(add(3, 2)).toEqual(5);
+  });
+
+  it("should return null if one of the two arguments is not a number", () => {
+    expect(add(2, "coucou")).toBeNull();
+  });
+});
+```
+
+Lancer le test avec
+
+```bash
+yarn run test
+```
+
+Pour calculer la couverture de code, lancer:
+
+```bash
+yarn test -- --coverage
+```
+
+## Test d'intagration avec React Testing Library
+
+React Testing Library permet d'intéragir avec le dom, faire un render, etc.
+Il faut installer cette librairie.
+
+Exemple, on peut tester qu'un' composant est bien render sans bug:
+
+```jsx
+// dans le fichier de test
+import Footer from "./"; // import du composant
+import { render } from "@testing-library/react";
+import { ThemeProvider } from "../../utils/context"; // si le contexte est utilisé par le composant, il ne faut pas oublier de l'importer aussi !
+
+describe("Footer", () => {
+  it("should render without crashing", async () => {
+    render(
+      <ThemeProvider>
+        <Footer />
+      </ThemeProvider>
+    );
+  });
+});
+```
+
+On peut aussi par exemple tester les évènements:
+
+```jsx
+import { render, screen, fireEvent } from "@testing-library/react";
+import { ThemeProvider } from "../../utils/context";
+import Footer from "./";
+
+it("should change theme", async () => {
+  render(
+    <ThemeProvider>
+      <Footer />
+    </ThemeProvider>
+  );
+  const nightModeButton = screen.getByRole("button");
+  expect(nightModeButton.textContent).toBe("Changer de mode : ☀️");
+  fireEvent.click(nightModeButton);
+  expect(nightModeButton.textContent).toBe("Changer de mode : 🌙");
+});
+```
+
+Pour plus d'infis, se référer à [la documentation de react tsting libraty](https://testing-library.com/docs/queries/bytestid/)
+
+## Créer des mock pour nos tests avec MSW (mock service worker)
+
+MSW permet de créer des mocks pour tester les composants plus facilement. Il fait d'abord l'installer avec `yarn add msw --dev`
+
+cf. la [documentation de la librairie MSW](https://github.com/mswjs/msw), ainsi que [le chapitre dédié à MSW sur le cours React d'OpenClassrooms](https://openclassrooms.com/fr/courses/7150606-creez-une-application-react-complete/7257071-allez-plus-loin-dans-vos-tests) pour avoir plus d'infos.
+
+## "Vieilles" syntaxes : composant classe
+
+À la base react n'utilisait pas de hooks et pas de coposant fonction, mais tout était géré avec des composants classe. Cette syntaxe est de moins en moins utilisée, mais il faut savoir que ça existe. D'ailleurs, (à l'heure de l'écriture de cette note de cours..) le tuto principal de la documentation de react utilise principalement des composant classes. S'y référer si besoin.
+
+Mais en 2 mots, les props sont passées en argument du constructeur pour ces composant classes.
