@@ -1,5 +1,6 @@
 .page-title {
   margin: 2rem 0;
+  color: var(--color-emph);
 }
 .page-date {
   display: block;
@@ -13,14 +14,17 @@
 .page-content h1,
 .page-content h2 {
   margin-top: 2rem;
+  color: var(--color-emph);
 }
 .page-content h3 {
   margin-top: 1rem;
   margin-left: 1rem;
+  color: var(--color-emph);
 }
 .page-content h4 {
   margin-top: 0.7rem;
   margin-left: 1.5rem;
+  color: var(--color-emph);
 }
 .page-content pre {
   overflow-x: auto;
@@ -33,4 +37,7 @@
 }
 .page-content strong {
   font-weight: bold;
+}
+.page-content a {
+  color: var(--color-emph);
 }
