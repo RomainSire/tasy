@@ -273,3 +273,8 @@ cf. la [documentation de la librairie MSW](https://github.com/mswjs/msw), ainsi 
 À la base react n'utilisait pas de hooks et pas de coposant fonction, mais tout était géré avec des composants classe. Cette syntaxe est de moins en moins utilisée, mais il faut savoir que ça existe. D'ailleurs, (à l'heure de l'écriture de cette note de cours..) le tuto principal de la documentation de react utilise principalement des composant classes. S'y référer si besoin.
 
 Mais en 2 mots, les props sont passées en argument du constructeur pour ces composant classes.
+
+## Bonnes pratiques en vrac
+
+- De manière générale, c'est mieux de créer des composants les plus simples possibles. Toute la logique sera alors écrite à part dans des hooks customs
+- Éviter de déclarer et utiliser un composant enfant dans un composant parent : sinon à chaque fois que le composant parent est re-render, le composant enfant doit l'être également, ce qui peut entrainer des pb de mémoire.
