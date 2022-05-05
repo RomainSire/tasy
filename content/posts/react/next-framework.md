@@ -205,4 +205,59 @@ export async function getServerSideProps({ params }) {
 }
 ```
 
-## Rendu hybride
+## Rendu hybride (= génération statique incrémentale) avec `getStaticProps()` avec un "revalidate"
+
+On mélange les 2 approches : on génère les pages en avance en statique, mais côté serveur pas au moment du build, mais pas à chaque fois qu'un utilisateur lance une requête, mais tous les "x temps" à définir.
+
+Pour cela, on va utiliser la méthode `getStaticProps()` comme pour le full statique, mais cette fois, avec un **"revalidate"**, pour lui indiquer de re-générer la page statique toutes les x secondes.
+
+Concrètement, en vrai le serveur ne régénère pas vraiment toutes les pages à chaque fois.
+En fait à chaque fois qu'un utilisateur demande une page, le serveur lui envoie directement la page demandée (statique), mais en plus, en tache de fond il check si la page est vieille (générée il y a plus longtemps que le temps indiqué dans le "revalidate"). Si c'est le cas, il rebuild la page, et le prochain visiteur aura la page mise à jour.
+
+Exemple:
+
+```jsx
+import Head from "next/head";
+import Link from "next/Link";
+
+export default function Home({posts}) {
+  return (
+    <>
+      <Head>
+        <title>Mon super blog</title>
+        <meta blabla />
+      </Head>
+      <ul>
+        {posts.map(post => <li>
+          <Link href={`/blog/${post.id}`}>
+            <a>
+              <h3>{{post.title}}</h3>
+            </a>
+          </Link>
+        </li>)}
+      </ul>
+    </>
+  )
+}
+
+export async function getStaticProps() {
+  const posts = await fetch('http://ma/super/api/posts')
+    .then(r => r.json())
+  return {
+    props: {
+      posts
+    },
+    revalidate: 5,  // <-- ici ! (délai de validité: 5 secondes)
+  }
+}
+```
+
+## Autres fonctionnalités utiles
+
+### Optimisation des images
+
+Par défaut, le chergement des images va être optimisé avec un placeholder flou léger le temps de charger l'image en mode lazy.
+
+### Pré-loading de page
+
+lorsqu'un lien est visible sur la page, il va commencer à télécharger les données de cette page, comme ça, ça sera hyper rapide pour l'utilisateur s'il clique sur le lien (si la connexion est suffisament bonne)
