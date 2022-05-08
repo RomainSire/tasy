@@ -252,12 +252,120 @@ export async function getStaticProps() {
 }
 ```
 
-## Autres fonctionnalités utiles
+## Liens entre pages
 
-### Optimisation des images
+Comme vu précédemment
 
-Par défaut, le chergement des images va être optimisé avec un placeholder flou léger le temps de charger l'image en mode lazy.
+- La route de la page dépend de l'enplacement du fichier dans le dossier **`pages`**
+- Pour faire un lien d'une page à l'autre du site, il faut utiliser le composant **`<Link>`** qui va entourer le lien:
 
-### Pré-loading de page
+```jsx
+<Link href="/mon/url">
+  <a className="link">Mon autre page</a>
+</Link>
+```
 
-lorsqu'un lien est visible sur la page, il va commencer à télécharger les données de cette page, comme ça, ça sera hyper rapide pour l'utilisateur s'il clique sur le lien (si la connexion est suffisament bonne)
+- les classes css doivent être ajoutées à l'élément `<a>` et non pas au composant `<Link>`
+- Pour un lien externe au site, utiliser seulement l'élément `<a>`
+
+> lorsqu'un lien est visible sur la page, il va commencer à télécharger les données de cette page, comme ça, ça sera hyper rapide pour l'utilisateur s'il clique sur le lien (si la connexion est suffisament bonne)
+
+## Images
+
+Next a un composant qui permet de faire le café pour les images ! Il s'occupe de:
+
+- responsive (différentes tailles)
+- optimisation (different formats webP)
+- lazy loading
+
+Il s'agit du composant `<Image>`
+
+> Nb: mettre les fichier statiques dans le dossier public
+> exemple pour les images : `public/images/logo.jpg`
+
+```jsx
+import Image from "next/image";
+
+const YourComponent = () => (
+  <Image
+    src="/images/profile.jpg" // Route of the image file
+    height={144} // Desired size with correct aspect ratio
+    width={144} // Desired size with correct aspect ratio
+    alt="Your Name"
+  />
+);
+```
+
+## Head et metadata
+
+Pour modifier le titre de la page, les metadata, la description, enfin tout ce qui peut se trouver dans le head d'une page, on utilise le composant Next : `<Head>`
+
+```jsx
+<Head>
+  <title>Mon super titre pour ma page</title>
+  <link rel="icon" href="/favicon.ico" />
+</Head>
+```
+
+> NB: il est possible de modifier la balise head en elle même (pour rajouter l'attribut lang par exemple), pour cela il faut créer une page `pages/_document.js`
+
+Il est aussi possible de charger des scripts js d'autres librairies, comme on le ferait dans le `<head>` d'une page. Dans ce cas, on ne va pas utiliser le composant `<Head>`, mais le composant `<Stript>` qui est prévu pour et qui ne va pas détériorer les performances.
+
+```jsx
+<Script
+  src="https://connect.facebook.net/en_US/sdk.js"
+  strategy="lazyOnload"
+  onLoad={() =>
+    console.log(`script loaded correctly, window.FB has been populated`)
+  }
+/>
+```
+
+## Style
+
+Next prend en charge directement la librairie de CSS-IN-JS "styled-jsx"
+
+Pour cela, simplement rajouter l'élément `<style jsx></style>` dans le 'return' du composant.
+
+```jsx
+<style jsx>{`
+  .maClasse {
+    padding: 0 0.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+  main {
+    padding: 5rem 0;
+    display: flex;
+    flex-direction: column;
+  }
+`}</style>
+```
+
+Mais Next suporte aussi le css normal, le scss, et les **modules** css ou scss (= dans ce cas le css est "scopé" au composant qui l'appelle)
+
+Pour utiliser sass, simplement installer:
+
+```bash
+npm install -D sass
+```
+
+> NB: il est possible de créer un composant **`components/Layout.js`**, ce dernier vas "wrapper" toutes les pages et servir de layout global.
+
+> NB: il est possible de créer un fichier CSS de classes utilitaires `styles/utils/module.css` pour les classes utilitaires qui seront utilisées à plusieurs endroits du code.
+
+### CSS Global
+
+Déjà il faut créer un fichier css à importer : **`styles/global.css`** par exemple.
+
+Puis on peut redéfinir le composant "de base" qui va contenir tous les autres ocmposants: **App**. Pour cela on crée le fichier **`pages/_app.js`** (redémearrer le serveur après).
+
+Il est alors possible d'importer du CSS global dans ce fichier (et dans ce fichier uniquement!)
+
+```jsx
+import "../styles/global.css";
+
+export default function App({ Component, pageProps }) {
+  return <Component {...pageProps} />;
+}
+```
