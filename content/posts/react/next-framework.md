@@ -369,3 +369,14 @@ export default function App({ Component, pageProps }) {
   return <Component {...pageProps} />;
 }
 ```
+
+## Page 404
+
+Il est possible de coder une page 404 custom en créant le fichier `pages/404.js`
+
+```jsx
+// pages/404.js
+export default function Custom404() {
+  return <h1>404 - Page Not Found</h1>;
+}
+```
